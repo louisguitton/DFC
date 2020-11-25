@@ -18,11 +18,11 @@ import java.util.Map;
  *
  */
 public class IOUtil {
-  
-  private IOUtil(){ // noninstantiable class
+
+  private IOUtil() { // noninstantiable class
     throw new AssertionError();
   }
-  
+
   /**
    * Returns a BufferedReader instance on the specified file.
    * 
@@ -32,36 +32,34 @@ public class IOUtil {
    */
   public static BufferedReader getFileReader(File file) throws IOException {
     BufferedReader in = null;
-    in = new BufferedReader(
-        new InputStreamReader(new FileInputStream(file)));
+    in = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
     return in;
   }
-  
+
   /**
-   * Returns a BufferedReader instance on the specified file.
-   * <code>charset</code> is used to specify the code scheme.
+   * Returns a BufferedReader instance on the specified file. <code>charset</code>
+   * is used to specify the code scheme.
+   * 
    * @param file
    * @param charset
    * @return
    * @throws IOException
    */
-  public static BufferedReader getFileReader(String file, String charset )
-      throws IOException {
+  public static BufferedReader getFileReader(String file, String charset) throws IOException {
     BufferedReader in = null;
-    in = new BufferedReader(
-        new InputStreamReader(new FileInputStream(file), charset));
+    in = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
     return in;
   }
 
   /**
-   * Loads a String-Int map from the specified file <code>file</code>.
-   * The file coding scheme is specified by <code>charset</code>.
+   * Loads a String-Int map from the specified file <code>file</code>. The file
+   * coding scheme is specified by <code>charset</code>.
+   * 
    * @param file
    * @param charset
    * @return
    */
-  public static Map<String, Integer> readStringToIntegerMap(
-      String file, String charset){
+  public static Map<String, Integer> readStringToIntegerMap(String file, String charset) {
     Map<String, Integer> map = new HashMap<String, Integer>();
     BufferedReader in = null;
 
@@ -88,19 +86,18 @@ public class IOUtil {
 
     return map;
   }
-  
+
   /**
-   * Writes the specified String-Int <code>map</code> into the 
-   * specified file <code>output</code>.
+   * Writes the specified String-Int <code>map</code> into the specified file
+   * <code>output</code>.
+   * 
    * @param output
    * @param map
    */
-  public static void writeStringToIntegerMap(
-      String output, 
-      Map<String, Integer> map){
+  public static void writeStringToIntegerMap(String output, Map<String, Integer> map) {
     try {
       PrintWriter out = new PrintWriter(output);
-      for ( String key : map.keySet()){
+      for (String key : map.keySet()) {
         int id = map.get(key);
         out.print(key);
         out.print(',');
@@ -108,7 +105,7 @@ public class IOUtil {
       }
       out.flush();
       out.close();
-    } catch ( Exception e ){
+    } catch (Exception e) {
       e.printStackTrace();
       System.exit(-1);
     }
@@ -116,32 +113,34 @@ public class IOUtil {
 
   /**
    * Checks whether the specified file does exist.
+   * 
    * @param file
    * @return
    */
-  public static boolean exist(String file){
+  public static boolean exist(String file) {
     try {
       File f = new File(file);
-      if ( f.exists())
+      if (f.exists())
         return true;
-    } catch ( Exception e ){
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
     return false;
   }
 
-  public static void closeReader(Reader reader){
+  public static void closeReader(Reader reader) {
     try {
-      if ( reader != null ){
+      if (reader != null) {
         reader.close();
       }
-    } catch ( Exception ignore ){
+    } catch (Exception ignore) {
     }
   }
-  
+
   /**
    * Returns the text contents of the specified file.
+   * 
    * @param file
    * @return
    */
@@ -149,41 +148,40 @@ public class IOUtil {
     StringBuilder sb = new StringBuilder();
     BufferedReader in = null;
     try {
-      in = new BufferedReader(new InputStreamReader(
-          new FileInputStream(file)));
+      in = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
       String line = null;
 
-      while ((line=in.readLine())!=null){
+      while ((line = in.readLine()) != null) {
         sb.append(line);
         sb.append('\n');
       }
-    } catch ( Exception e ){
+    } catch (Exception e) {
       e.printStackTrace();
     } finally {
       closeReader(in);
     }
     return sb.toString();
   }
-  
+
   /**
-   * Returns the text contents of the specified file by using
-   * the default coding scheme.
+   * Returns the text contents of the specified file by using the default coding
+   * scheme.
+   * 
    * @param file
    * @return
    */
-  public static String getFileText(File file){
+  public static String getFileText(File file) {
     StringBuilder sb = new StringBuilder();
     BufferedReader in = null;
     try {
-      in = new BufferedReader(new InputStreamReader(
-          new FileInputStream(file)));
+      in = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
       String line = null;
 
-      while ((line=in.readLine())!=null){
+      while ((line = in.readLine()) != null) {
         sb.append(line);
         sb.append('\n');
       }
-    } catch ( Exception e ){
+    } catch (Exception e) {
       e.printStackTrace();
     } finally {
       closeReader(in);
@@ -191,27 +189,27 @@ public class IOUtil {
 
     return sb.toString();
   }
-  
+
   /**
-   * Returns the text contents of the specified file by using
-   * the specified charset coding scheme.
+   * Returns the text contents of the specified file by using the specified
+   * charset coding scheme.
+   * 
    * @param file
    * @param charset
    * @return
    */
-  public static String getFileText(File file, String charset){
+  public static String getFileText(File file, String charset) {
     StringBuilder sb = new StringBuilder();
     BufferedReader in = null;
     try {
-      in = new BufferedReader(new InputStreamReader(
-          new FileInputStream(file), charset));
+      in = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
       String line = null;
 
-      while ((line=in.readLine())!=null){
+      while ((line = in.readLine()) != null) {
         sb.append(line);
         sb.append('\n');
       }
-    } catch ( Exception e ){
+    } catch (Exception e) {
       e.printStackTrace();
     } finally {
       closeReader(in);
@@ -219,9 +217,10 @@ public class IOUtil {
 
     return sb.toString();
   }
-  
+
   /**
    * Returns the text contents of the specified file.
+   * 
    * @param file
    * @return
    */
@@ -229,15 +228,14 @@ public class IOUtil {
     StringBuilder sb = new StringBuilder();
     BufferedReader in = null;
     try {
-      in = new BufferedReader(new InputStreamReader(
-          new FileInputStream(file), charset));
+      in = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
       String line = null;
 
-      while ((line=in.readLine())!=null){
+      while ((line = in.readLine()) != null) {
         sb.append(line);
         sb.append('\n');
       }
-    } catch ( Exception e ){
+    } catch (Exception e) {
       e.printStackTrace();
     } finally {
       closeReader(in);

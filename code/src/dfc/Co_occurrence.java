@@ -47,7 +47,7 @@ public class Co_occurrence implements Decorator {
 	private double[] LDApz;
 	private double[][] LDAphi;
 
-	private HashMap<Integer, LinkedList<String>> topWord4Topic = new HashMap<Integer, LinkedList<String>>();// HashMap<topic,topWord_List>LDAÃ¿¸ötopicÏÂµÄtop-10¸ö´Ê
+	private HashMap<Integer, LinkedList<String>> topWord4Topic = new HashMap<Integer, LinkedList<String>>();// HashMap<topic,topWord_List>LDAÃ¿ï¿½ï¿½topicï¿½Âµï¿½top-10ï¿½ï¿½ï¿½ï¿½
 	private HashMap<Integer, Double> LDAtopicCateRel = new HashMap<Integer, Double>();
 	private double[] wordFre;
 
@@ -63,13 +63,11 @@ public class Co_occurrence implements Decorator {
 	}
 
 	/*******
-	 * use LDA ******** use LDA to compute delta_{w,c} rel(w,c)=¡Æs¡Æk
-	 * P_lda(w|k)P_lda(k|s) P_lda(k|s)=P_lda(z=k)P_lda(s|k)/¡Æk
-	 * P_lda(z=i)P_lda(s|i) P_lda(z=k)=(nz[k] + alpha) / (¡Æk nz[i] + numTopic *
-	 * alpha);
+	 * use LDA ******** use LDA to compute delta_{w,c} rel(w,c)=ï¿½ï¿½sï¿½ï¿½k
+	 * P_lda(w|k)P_lda(k|s) P_lda(k|s)=P_lda(z=k)P_lda(s|k)/ï¿½ï¿½k P_lda(z=i)P_lda(s|i)
+	 * P_lda(z=k)=(nz[k] + alpha) / (ï¿½ï¿½k nz[i] + numTopic * alpha);
 	 */
-	public void initLDA(String wordmap_path, String tassign_path,
-			String phi_path, String topWord_path) {
+	public void initLDA(String wordmap_path, String tassign_path, String phi_path, String topWord_path) {
 		String line;
 		String[] ves;
 		String[] term;
@@ -139,16 +137,12 @@ public class Co_occurrence implements Decorator {
 			br.close();
 
 			double sum = 0.0;
-			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic
-					.entrySet()) {
+			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic.entrySet()) {
 				sum += LDApz[entry.getKey()];
 			}
 
-			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic
-					.entrySet()) {
-				LDApz[entry.getKey()] = 1.0
-						* (LDApz[entry.getKey()] + LDAalpha)
-						/ (sum + filtertopicnum * LDAalpha);
+			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic.entrySet()) {
+				LDApz[entry.getKey()] = 1.0 * (LDApz[entry.getKey()] + LDAalpha) / (sum + filtertopicnum * LDAalpha);
 			}
 
 			br = new BufferedReader(new FileReader(phi_path));
@@ -195,37 +189,28 @@ public class Co_occurrence implements Decorator {
 		for (String s : seedSet) {
 
 			if (LDAword2id.get(s) == null) {
-				System.out.println(String.format(
-						"word %s is not found in the vocabulary", s));
+				System.out.println(String.format("word %s is not found in the vocabulary", s));
 				continue;
 			}
 
-			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic
-					.entrySet()) {
-				tmp[entry.getKey()] = LDApz[entry.getKey()]
-						* LDAphi[entry.getKey()][LDAword2id.get(s)];
+			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic.entrySet()) {
+				tmp[entry.getKey()] = LDApz[entry.getKey()] * LDAphi[entry.getKey()][LDAword2id.get(s)];
 				sum = sum + tmp[entry.getKey()];
 			}
 
-			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic
-					.entrySet()) {
+			for (Entry<Integer, LinkedList<String>> entry : topWord4Topic.entrySet()) {
 				LDApks[i].put(entry.getKey(), tmp[entry.getKey()] / sum);
 			}
 
-			maplist = new ArrayList<Map.Entry<Integer, Double>>(
-					LDApks[i].entrySet());
-			Collections.sort(maplist,
-					new Comparator<Map.Entry<Integer, Double>>() {
-						public int compare(Map.Entry<Integer, Double> mapping1,
-								Map.Entry<Integer, Double> mapping2) {
-							return mapping2.getValue().compareTo(
-									mapping1.getValue());
-						}
-					});
+			maplist = new ArrayList<Map.Entry<Integer, Double>>(LDApks[i].entrySet());
+			Collections.sort(maplist, new Comparator<Map.Entry<Integer, Double>>() {
+				public int compare(Map.Entry<Integer, Double> mapping1, Map.Entry<Integer, Double> mapping2) {
+					return mapping2.getValue().compareTo(mapping1.getValue());
+				}
+			});
 
 			for (int k = 0; k < topk; k++) {
-				LDAtoppks[i].put(maplist.get(k).getKey(), maplist.get(k)
-						.getValue());
+				LDAtoppks[i].put(maplist.get(k).getKey(), maplist.get(k).getValue());
 			}
 
 			i++;
@@ -242,8 +227,7 @@ public class Co_occurrence implements Decorator {
 			for (Map.Entry<Integer, Double> entry : LDAtoppks[s].entrySet()) {
 				topic = entry.getKey();
 				wordid = LDAword2id.get(word);
-				rel = rel + LDAphi[entry.getKey()][LDAword2id.get(word)]
-						* entry.getValue();
+				rel = rel + LDAphi[entry.getKey()][LDAword2id.get(word)] * entry.getValue();
 			}
 		}
 		rel = rel / seedSet.size();
@@ -253,8 +237,7 @@ public class Co_occurrence implements Decorator {
 	/*
 	 * compute p(w,r)
 	 */
-	public double compTopicCateRel(HashSet<String>[] seedSet, String word,
-			int topicid) {
+	public double compTopicCateRel(HashSet<String>[] seedSet, String word, int topicid) {
 		int topic = 0;
 		int wordid = 0;
 		double rel = 0.0;
@@ -269,8 +252,7 @@ public class Co_occurrence implements Decorator {
 			computePks(seedSet[r]);
 			for (int s = 0; s < seedSet[r].size(); s++) {
 				wordid = LDAword2id.get(word);
-				rel = rel + LDAphi[topicid][LDAword2id.get(word)]
-						* LDApks[s].get(topicid);
+				rel = rel + LDAphi[topicid][LDAword2id.get(word)] * LDApks[s].get(topicid);
 			}
 		}
 		return rel;
@@ -287,32 +269,24 @@ public class Co_occurrence implements Decorator {
 		double[][] exp = new double[model.wordNum][model.cateNum];
 
 		// load LDA file
-		initLDA(model.LDAwordmapPath, model.LDAtassignPath, model.LDAphiPath,
-				model.LDAtwordPath);
+		initLDA(model.LDAwordmapPath, model.LDAtassignPath, model.LDAphiPath, model.LDAtwordPath);
 
 		// create the pesudo seed words of background categories
 		/*
-		 * p(k,r)=¡Æw p(w,r),p(w,r)=¡Æs p(w,s)
-		 * p(w,s)=¡Æk p(w|k)p(k|s)
+		 * p(k,r)=ï¿½ï¿½w p(w,r),p(w,r)=ï¿½ï¿½s p(w,s) p(w,s)=ï¿½ï¿½k p(w|k)p(k|s)
 		 */
 		double rel = 0.0;
-		for (Entry<Integer, LinkedList<String>> entry : topWord4Topic
-				.entrySet()) {
+		for (Entry<Integer, LinkedList<String>> entry : topWord4Topic.entrySet()) {
 			rel = 0.0;
 			for (int w = 0; w < 10; w++) {
-				rel = rel
-						+ compTopicCateRel(model.seedSet,
-								topWord4Topic.get(entry.getKey()).get((w)),
-								entry.getKey());
+				rel = rel + compTopicCateRel(model.seedSet, topWord4Topic.get(entry.getKey()).get((w)), entry.getKey());
 			}
 			LDAtopicCateRel.put(entry.getKey(), rel);
 		}
 		List<Map.Entry<Integer, Double>> maplist = null;
-		maplist = new ArrayList<Map.Entry<Integer, Double>>(
-				LDAtopicCateRel.entrySet());
+		maplist = new ArrayList<Map.Entry<Integer, Double>>(LDAtopicCateRel.entrySet());
 		Collections.sort(maplist, new Comparator<Map.Entry<Integer, Double>>() {
-			public int compare(Map.Entry<Integer, Double> mapping1,
-					Map.Entry<Integer, Double> mapping2) {
+			public int compare(Map.Entry<Integer, Double> mapping1, Map.Entry<Integer, Double> mapping2) {
 				return mapping1.getValue().compareTo(mapping2.getValue());
 			}
 		});
@@ -337,8 +311,7 @@ public class Co_occurrence implements Decorator {
 				}
 				computePks(model.seedSet[c]);
 				for (int w = 0; w < model.wordNum; w++) {
-					model.tao[w][c] = computeRel(model.seedSet[c],
-							Dictionary.getWord(w));
+					model.tao[w][c] = computeRel(model.seedSet[c], Dictionary.getWord(w));
 					sum[c] += model.tao[w][c];
 				}
 
@@ -350,12 +323,11 @@ public class Co_occurrence implements Decorator {
 				}
 				computePks(model.fakeSeedSet[c]);
 				for (int w = 0; w < model.wordNum; w++) {
-					model.tao[w][c] = computeRel(model.fakeSeedSet[c],
-							Dictionary.getWord(w));
+					model.tao[w][c] = computeRel(model.fakeSeedSet[c], Dictionary.getWord(w));
 					sum[c] += model.tao[w][c];
 				}
 			}
-		} 
+		}
 		/*******************
 		 * Doc-rel
 		 *******************/
@@ -363,15 +335,13 @@ public class Co_occurrence implements Decorator {
 
 			for (int i = 0; i < model.wordNum; i++) {
 				for (int c = 0; c < model.iCateNum; c++) {
-					model.tao[i][c] = Co_occurrence.catecoRelation(
-							model.seedSet[c], Dictionary.getWord(i));
+					model.tao[i][c] = Co_occurrence.catecoRelation(model.seedSet[c], Dictionary.getWord(i));
 					sum[c] += model.tao[i][c];
 				}
 			}
 			for (int i = 0; i < model.wordNum; i++) {
 				for (int c = model.iCateNum; c < model.cateNum; c++) {
-					model.tao[i][c] = Co_occurrence.catecoRelation(
-							model.fakeSeedSet[c], Dictionary.getWord(i));
+					model.tao[i][c] = Co_occurrence.catecoRelation(model.fakeSeedSet[c], Dictionary.getWord(i));
 					sum[c] += model.tao[i][c];
 				}
 			}
@@ -417,9 +387,7 @@ public class Co_occurrence implements Decorator {
 			} else {
 				for (int c = 0; c < model.cateNum; c++) {
 					model.tao[i][c] /= temp;
-					model.tao[i][c] = model.tao[i][c] - thr > 0 ? model.tao[i][c]
-							- thr
-							: 0;
+					model.tao[i][c] = model.tao[i][c] - thr > 0 ? model.tao[i][c] - thr : 0;
 					model.tao[i][c] = model.tao[i][c] * exp[i][c];
 				}
 			}
@@ -432,8 +400,7 @@ public class Co_occurrence implements Decorator {
 				if (model.rho == 1 && model.tao[i][c] == 0) {
 					model.tao[i][c] = 1;
 				}
-				model.tao[i][c] = model.tao[i][c] * model.rho
-						/ (1 - model.rho + model.tao[i][c] * model.rho);
+				model.tao[i][c] = model.tao[i][c] * model.rho / (1 - model.rho + model.tao[i][c] * model.rho);
 			}
 		}
 	}
@@ -500,8 +467,7 @@ public class Co_occurrence implements Decorator {
 		if (intersection(seedWord, word) == 0)
 			return 0;
 		interword.add(Dictionary.getIndex(word));
-		double re = (double) intersection(seedWord, word)
-				/ word_doc.get(seedWord).size();
+		double re = (double) intersection(seedWord, word) / word_doc.get(seedWord).size();
 		return re;
 	}
 

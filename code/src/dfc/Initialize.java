@@ -51,7 +51,7 @@ public class Initialize implements Decorator {
 		model.bCateDoc = new int[model.cateNum];
 		// the number of irrelevant-topics document
 		model.bDocSum = 0;
-		model.topk=1;
+		model.topk = 1;
 		model.wordCategory = new HashMap<String, double[]>();
 		model.pwordTopic = new HashMap[1 + model.topicNum];
 		model.pwordCategory = new HashMap[model.cateNum];
@@ -103,8 +103,8 @@ public class Initialize implements Decorator {
 			}
 			br.close();
 		} catch (Exception e) {
-			System.out
-					.println("the seed word file is null or ill-formed , please see the 'readme.txt' for more information");
+			System.out.println(
+					"the seed word file is null or ill-formed , please see the 'readme.txt' for more information");
 			e.printStackTrace();
 			System.exit(-1);
 		}

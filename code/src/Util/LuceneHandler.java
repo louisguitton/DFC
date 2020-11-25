@@ -23,7 +23,6 @@ public class LuceneHandler {
     private String indexPath;
     private static IndexReader indexReader;
 
-
     public static void main(String[] args) {
         demo_readDoc();
     }
@@ -37,7 +36,6 @@ public class LuceneHandler {
         System.out.println(doc.get(Util.LuceneHandler.ABSTRACT));
         System.out.println();
     }
-
 
     public LuceneHandler(String indexPath) {
         this.indexPath = indexPath;
@@ -69,7 +67,6 @@ public class LuceneHandler {
         return documents;
     }
 
-
     public Document getDoc(int id) {
         Document doc = null;
         try {
@@ -81,7 +78,6 @@ public class LuceneHandler {
         }
         return doc;
     }
-
 
     public Set<String> getWordSet() {
         Set<String> dic = new HashSet<>();

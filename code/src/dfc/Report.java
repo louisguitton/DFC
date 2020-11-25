@@ -28,10 +28,8 @@ public class Report {
 
 		for (int i = 0; i < model.docNum; i++) {
 			if (model.documents[i].check) {
-				System.out.println("prediction: "
-						+ model.documents[i].prediction);
-				System.out.println("groundtruth: "
-						+ model.documents[i].groundTruth);
+				System.out.println("prediction: " + model.documents[i].prediction);
+				System.out.println("groundtruth: " + model.documents[i].groundTruth);
 			}
 		}
 
@@ -39,8 +37,7 @@ public class Report {
 		System.out.println("accuracy: " + re);
 	}
 
-	protected static void macroReport(SModel model, int iter)
-			throws IOException {
+	protected static void macroReport(SModel model, int iter) throws IOException {
 
 		int[] resT = new int[model.cateNum];
 		int[] resS = new int[model.cateNum];
@@ -60,10 +57,9 @@ public class Report {
 		model.resultWriter.write("fakeSeedNum:" + model.fakeSeedNum + "\r\n");
 		model.resultWriter.write(iter + "\r\n");
 		for (int i = 0; i < model.iCateNum; i++) {
-			System.out.println(i + ": " + resT[i] + " " + resS[i] + " "
-					+ model.groundTruth[i]);
-			model.resultWriter.write(i + "  resT:" + resT[i] + " resP:"
-					+ resS[i] + " resG:" + model.groundTruth[i] + "\r\n");
+			System.out.println(i + ": " + resT[i] + " " + resS[i] + " " + model.groundTruth[i]);
+			model.resultWriter
+					.write(i + "  resT:" + resT[i] + " resP:" + resS[i] + " resG:" + model.groundTruth[i] + "\r\n");
 			p = (double) resT[i] / resS[i];
 			r = (double) resT[i] / model.groundTruth[i];
 			if (p == 0 || r == 0)

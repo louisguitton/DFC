@@ -10,8 +10,7 @@ import Util.Pair;
 public class Sampling {
 
 	// sampling x and z(topic) for words
-	protected static void sampleXZ(int index, SModel model, int category,
-			int[][] xmirror, int[][] zmirror) {
+	protected static void sampleXZ(int index, SModel model, int category, int[][] xmirror, int[][] zmirror) {
 		SDocument doc = model.documents[index];
 		int len = doc.contents.size();
 		int x, word, topic, sampleRes;
@@ -61,12 +60,11 @@ public class Sampling {
 		}
 	}
 
-	protected static double initSampleCate(int index, SModel model, int c,
-			int[] xmirror, int[] zmirror, int[] wmirror) {
+	protected static double initSampleCate(int index, SModel model, int c, int[] xmirror, int[] zmirror,
+			int[] wmirror) {
 
 		double re;
-		DocMirroe.mirror(xmirror, zmirror, wmirror,
-				model.documents[index].contents.size());
+		DocMirroe.mirror(xmirror, zmirror, wmirror, model.documents[index].contents.size());
 		double part1 = 0, part2, part3, part4, part5;
 		double pp1 = 0, pp2 = 0;
 
@@ -81,12 +79,10 @@ public class Sampling {
 				if (DocMirroe.topic_word_[k][word] == 0)
 					continue;
 				pp1 += logAccum(model.wordTopic[word][k] + model.beta1 - 1,
-						model.wordTopic[word][k] + model.beta1
-								- DocMirroe.topic_word_[k][word]);
+						model.wordTopic[word][k] + model.beta1 - DocMirroe.topic_word_[k][word]);
 			}
-			pp2 = logAccum(model.numRWords4Topic[k] + model.beta1
-					* model.wordNum - 1, model.numRWords4Topic[k]
-					- DocMirroe.topicSum[k] + model.beta1 * model.wordNum);
+			pp2 = logAccum(model.numRWords4Topic[k] + model.beta1 * model.wordNum - 1,
+					model.numRWords4Topic[k] - DocMirroe.topicSum[k] + model.beta1 * model.wordNum);
 			part1 += (pp1 - pp2);
 		}
 
@@ -94,11 +90,9 @@ public class Sampling {
 		/** ---------------------------------------------------- */
 		pp1 = 0;
 		for (int k = 0; k < model.topicNum; k++) {
-			pp1 += logAccum(DocMirroe.topicSum[k] + model.phi[c][k] - 1,
-					model.phi[c][k]);
+			pp1 += logAccum(DocMirroe.topicSum[k] + model.phi[c][k] - 1, model.phi[c][k]);
 		}
-		pp2 = logAccum(DocMirroe.rwordSum + model.phiSum[c] - 1,
-				model.phiSum[c]);
+		pp2 = logAccum(DocMirroe.rwordSum + model.phiSum[c] - 1, model.phiSum[c]);
 		/** ---------------------------------------------------- */
 		part2 = pp1 - pp2;
 
@@ -110,12 +104,10 @@ public class Sampling {
 			if (DocMirroe.categoryTopic_word_[word] == 0)
 				continue;
 			pp1 += logAccum(model.categoryWord[c][word] + model.beta0,
-					model.categoryWord[c][word]
-							- DocMirroe.categoryTopic_word_[word] + model.beta0);
+					model.categoryWord[c][word] - DocMirroe.categoryTopic_word_[word] + model.beta0);
 		}
-		pp2 = logAccum(model.numCWords4Cate[c] + model.beta0 * model.wordNum
-				- 1, model.numCWords4Cate[c] - DocMirroe.cwordSum + model.beta0
-				* model.wordNum);
+		pp2 = logAccum(model.numCWords4Cate[c] + model.beta0 * model.wordNum - 1,
+				model.numCWords4Cate[c] - DocMirroe.cwordSum + model.beta0 * model.wordNum);
 		part3 = (pp1 - pp2);
 
 		if (c < model.iCateNum) {
@@ -129,18 +121,15 @@ public class Sampling {
 		part5 = Math.log(model.kappa[index]);
 
 		re = part1 + part2 + part3 + part4 + part5;
-		DocMirroe.clean(xmirror, zmirror, wmirror,
-				model.documents[index].contents.size());
+		DocMirroe.clean(xmirror, zmirror, wmirror, model.documents[index].contents.size());
 		return re;
 	}
 
 	// specifed category
-	protected static double sampleC(int index, SModel model, int c,
-			int[] xmirror, int[] zmirror, int[] wmirror) {
+	protected static double sampleC(int index, SModel model, int c, int[] xmirror, int[] zmirror, int[] wmirror) {
 
 		double re;
-		DocMirroe.mirror(xmirror, zmirror, wmirror,
-				model.documents[index].contents.size());
+		DocMirroe.mirror(xmirror, zmirror, wmirror, model.documents[index].contents.size());
 		double part1 = 0, part2, part3, part4, part5;
 		double pp1 = 0, pp2 = 0;
 
@@ -155,12 +144,10 @@ public class Sampling {
 				if (DocMirroe.topic_word_[k][word] == 0)
 					continue;
 				pp1 += logAccum(model.wordTopic[word][k] + model.beta1 - 1,
-						model.wordTopic[word][k] + model.beta1
-								- DocMirroe.topic_word_[k][word]);
+						model.wordTopic[word][k] + model.beta1 - DocMirroe.topic_word_[k][word]);
 			}
-			pp2 = logAccum(model.numRWords4Topic[k] + model.beta1
-					* model.wordNum - 1, model.numRWords4Topic[k]
-					- DocMirroe.topicSum[k] + model.beta1 * model.wordNum);
+			pp2 = logAccum(model.numRWords4Topic[k] + model.beta1 * model.wordNum - 1,
+					model.numRWords4Topic[k] - DocMirroe.topicSum[k] + model.beta1 * model.wordNum);
 			part1 += (pp1 - pp2);
 		}
 
@@ -168,10 +155,8 @@ public class Sampling {
 		/** ---------------------------------------------------- */
 		pp1 = 0;
 		for (int k = 0; k < model.topicNum; k++)
-			pp1 += logAccum(DocMirroe.topicSum[k] + model.phi[c][k] - 1,
-					model.phi[c][k]);
-		pp2 = logAccum(DocMirroe.rwordSum + model.phiSum[c] - 1,
-				model.phiSum[c]);
+			pp1 += logAccum(DocMirroe.topicSum[k] + model.phi[c][k] - 1, model.phi[c][k]);
+		pp2 = logAccum(DocMirroe.rwordSum + model.phiSum[c] - 1, model.phiSum[c]);
 		/** ---------------------------------------------------- */
 		part2 = pp1 - pp2;
 
@@ -183,12 +168,10 @@ public class Sampling {
 			if (DocMirroe.categoryTopic_word_[word] == 0)
 				continue;
 			pp1 += logAccum(model.categoryWord[c][word] + model.beta0,
-					model.categoryWord[c][word]
-							- DocMirroe.categoryTopic_word_[word] + model.beta0);
+					model.categoryWord[c][word] - DocMirroe.categoryTopic_word_[word] + model.beta0);
 		}
-		pp2 = logAccum(model.numCWords4Cate[c] + model.beta0 * model.wordNum
-				- 1, model.numCWords4Cate[c] - DocMirroe.cwordSum + model.beta0
-				* model.wordNum);
+		pp2 = logAccum(model.numCWords4Cate[c] + model.beta0 * model.wordNum - 1,
+				model.numCWords4Cate[c] - DocMirroe.cwordSum + model.beta0 * model.wordNum);
 		part3 = (pp1 - pp2);
 
 		part4 = Math.log(1 + model.eta[index][c]);
@@ -196,18 +179,15 @@ public class Sampling {
 		part5 = Math.log(model.kappa[index]);
 
 		re = part1 + part2 + part3 + part4 + part5;
-		DocMirroe.clean(xmirror, zmirror, wmirror,
-				model.documents[index].contents.size());
+		DocMirroe.clean(xmirror, zmirror, wmirror, model.documents[index].contents.size());
 		return re;
 	}
 
 	// irreleant category
-	protected static double sampleB(int index, SModel model, int c,
-			int[] xmirror, int[] zmirror, int[] wmirror) {
+	protected static double sampleB(int index, SModel model, int c, int[] xmirror, int[] zmirror, int[] wmirror) {
 
 		double re;
-		DocMirroe.mirror(xmirror, zmirror, wmirror,
-				model.documents[index].contents.size());
+		DocMirroe.mirror(xmirror, zmirror, wmirror, model.documents[index].contents.size());
 		double part1 = 0, part2, part3, part4, part5;
 		double pp1 = 0, pp2 = 0;
 
@@ -222,12 +202,10 @@ public class Sampling {
 				if (DocMirroe.topic_word_[k][word] == 0)
 					continue;
 				pp1 += logAccum(model.wordTopic[word][k] + model.beta1 - 1,
-						model.wordTopic[word][k] + model.beta1
-								- DocMirroe.topic_word_[k][word]);
+						model.wordTopic[word][k] + model.beta1 - DocMirroe.topic_word_[k][word]);
 			}
-			pp2 = logAccum(model.numRWords4Topic[k] + model.beta1
-					* model.wordNum - 1, model.numRWords4Topic[k]
-					- DocMirroe.topicSum[k] + model.beta1 * model.wordNum);
+			pp2 = logAccum(model.numRWords4Topic[k] + model.beta1 * model.wordNum - 1,
+					model.numRWords4Topic[k] - DocMirroe.topicSum[k] + model.beta1 * model.wordNum);
 			part1 += (pp1 - pp2);
 		}
 
@@ -235,10 +213,8 @@ public class Sampling {
 		/** ---------------------------------------------------- */
 		pp1 = 0;
 		for (int k = 0; k < model.topicNum; k++)
-			pp1 += logAccum(DocMirroe.topicSum[k] + model.phi[c][k] - 1,
-					model.phi[c][k]);
-		pp2 = logAccum(DocMirroe.rwordSum + model.phiSum[c] - 1,
-				model.phiSum[c]);
+			pp1 += logAccum(DocMirroe.topicSum[k] + model.phi[c][k] - 1, model.phi[c][k]);
+		pp2 = logAccum(DocMirroe.rwordSum + model.phiSum[c] - 1, model.phiSum[c]);
 		/** ---------------------------------------------------- */
 		part2 = pp1 - pp2;
 
@@ -250,12 +226,10 @@ public class Sampling {
 			if (DocMirroe.categoryTopic_word_[word] == 0)
 				continue;
 			pp1 += logAccum(model.categoryWord[c][word] + model.beta0,
-					model.categoryWord[c][word]
-							- DocMirroe.categoryTopic_word_[word] + model.beta0);
+					model.categoryWord[c][word] - DocMirroe.categoryTopic_word_[word] + model.beta0);
 		}
-		pp2 = logAccum(model.numCWords4Cate[c] + model.beta0 * model.wordNum
-				- 1, model.numCWords4Cate[c] - DocMirroe.cwordSum + model.beta0
-				* model.wordNum);
+		pp2 = logAccum(model.numCWords4Cate[c] + model.beta0 * model.wordNum - 1,
+				model.numCWords4Cate[c] - DocMirroe.cwordSum + model.beta0 * model.wordNum);
 		part3 = (pp1 - pp2);
 
 		// part4
@@ -264,21 +238,18 @@ public class Sampling {
 			model.bCateDoc[model.documents[index].prediction]--;
 			model.bDocSum--;
 		}
-		part4 = Math.log(model.alpha1 + model.bCateDoc[c])
-				- Math.log(model.bDocSum + model.bCateNum * model.alpha1);
+		part4 = Math.log(model.alpha1 + model.bCateDoc[c]) - Math.log(model.bDocSum + model.bCateNum * model.alpha1);
 
 		// part5 k_d
 		part5 = Math.log(1 - model.kappa[index]);
 
 		re = part1 + part2 + part3 + part4 + part5;
-		DocMirroe.clean(xmirror, zmirror, wmirror,
-				model.documents[index].contents.size());
+		DocMirroe.clean(xmirror, zmirror, wmirror, model.documents[index].contents.size());
 		return re;
 	}
 
 	// P(z,x)
-	protected static void kernel(SModel model, int docIndex, int category,
-			int word) {
+	protected static void kernel(SModel model, int docIndex, int category, int word) {
 		double temp, temp1, temp2, temp3;
 		model.temp[0] = model.tao[word][category];
 		temp1 = (model.categoryWord[category][word] + model.beta0)
@@ -286,13 +257,12 @@ public class Sampling {
 		model.temp[0] *= (model.categoryWord[category][word] + model.beta0)
 				/ (model.numCWords4Cate[category] + model.beta0 * model.wordNum);
 		for (int z = 0; z < model.topicNum; z++) {
-			temp2 = (model.wordTopic[word][z] + model.beta1)
-					/ (model.numRWords4Topic[z] + model.wordNum * model.beta1);
+			temp2 = (model.wordTopic[word][z] + model.beta1) / (model.numRWords4Topic[z] + model.wordNum * model.beta1);
 			temp3 = (model.docTopic[docIndex][z] + model.phi[category][z])
 					/ (model.docX[docIndex][1] + model.phiSum[category]);
-			temp = ((model.wordTopic[word][z] + model.beta1) / (model.numRWords4Topic[z] + model.wordNum
-					* model.beta1))
-					* ((model.docTopic[docIndex][z] + model.phi[category][z]) / (model.docX[docIndex][1] + model.phiSum[category]));
+			temp = ((model.wordTopic[word][z] + model.beta1) / (model.numRWords4Topic[z] + model.wordNum * model.beta1))
+					* ((model.docTopic[docIndex][z] + model.phi[category][z])
+							/ (model.docX[docIndex][1] + model.phiSum[category]));
 			model.temp[1 + z] = (1 - model.tao[word][category]) * temp;
 		}
 	}
@@ -306,8 +276,7 @@ public class Sampling {
 		return re;
 	}
 
-	protected static void update(int index, SModel model, int[] xmirror,
-			int[] zmirror, int newCate) {
+	protected static void update(int index, SModel model, int[] xmirror, int[] zmirror, int newCate) {
 
 		SDocument doc = model.documents[index];
 		int x, word, topic;
@@ -356,8 +325,8 @@ public class Sampling {
 		doc.prediction = newCate;
 	}
 
-	protected static void initUpdate(int index, SModel model, int[] xmirror,
-			int[] zmirror, int[] wmirror, int newCate) {
+	protected static void initUpdate(int index, SModel model, int[] xmirror, int[] zmirror, int[] wmirror,
+			int newCate) {
 		SDocument doc = model.documents[index];
 		int x, word, topic;
 		if (newCate >= model.iCateNum) {
@@ -390,8 +359,7 @@ public class Sampling {
 
 	}
 
-	protected static void initRollBack(int index, SModel model,
-			int formerCategory) {
+	protected static void initRollBack(int index, SModel model, int formerCategory) {
 
 		SDocument doc = model.documents[index];
 		int x, word, topic;
@@ -414,8 +382,7 @@ public class Sampling {
 		doc.xvec.clear();
 	}
 
-	protected static void rollBackForC(int index, SModel model,
-			int formerCategory, int[] xmirror, int[] zmirror) {
+	protected static void rollBackForC(int index, SModel model, int formerCategory, int[] xmirror, int[] zmirror) {
 
 		SDocument doc = model.documents[index];
 		int x, word, topic;
@@ -450,8 +417,7 @@ public class Sampling {
 		}
 	}
 
-	protected static void rollBackForB(int index, SModel model,
-			int formerCategory, int[] xmirror, int[] zmirror) {
+	protected static void rollBackForB(int index, SModel model, int formerCategory, int[] xmirror, int[] zmirror) {
 		SDocument doc = model.documents[index];
 		int x, word, topic;
 		if (doc.y == 0) {

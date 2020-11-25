@@ -29,15 +29,14 @@ public class PaperAbsIndexHandler {
     public static final String CATE = "category";
     private String indexPath;
     private static IndexReader indexReader;
-    //  private FixedBitSet bits;
+    // private FixedBitSet bits;
     private Bits searchAllBits;
 
     public PaperAbsIndexHandler(String indexPath) {
         this.indexPath = indexPath;
         try {
-            indexReader =
-                    DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
-//      bits = new FixedBitSet(indexReader.numDocs());  
+            indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
+            // bits = new FixedBitSet(indexReader.numDocs());
             searchAllBits = new Bits.MatchAllBits(indexReader.numDocs());
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -66,8 +65,7 @@ public class PaperAbsIndexHandler {
     }
 
     /**
-     * Gets the term vector for the document specified
-     * by <code>id</code>
+     * Gets the term vector for the document specified by <code>id</code>
      *
      * @param id
      * @return
@@ -81,18 +79,16 @@ public class PaperAbsIndexHandler {
         // this field must be indexed by Lucene.
         Term term = new Term(ID, String.valueOf(id));
         try {
-            PostingsEnum docEnum = MultiFields.getTermDocsEnum(
-                    indexReader, searchAllBits,
-                    ID, term.bytes());
+            PostingsEnum docEnum = MultiFields.getTermDocsEnum(indexReader, searchAllBits, ID, term.bytes());
             int doc = DocsEnum.NO_MORE_DOCS;
             BytesRef ref = null;
             String termText = null;
             DocsEnum reusableDocEnum = null;
             while ((doc = docEnum.nextDoc()) != DocsEnum.NO_MORE_DOCS) {
                 Terms terms = indexReader.getTermVector(doc, ABSTRACT);
-                //  if(terms==null){
-                //   System.out.println(indexReader.getTermVector(doc,TITLE));
-                //  }
+                // if(terms==null){
+                // System.out.println(indexReader.getTermVector(doc,TITLE));
+                // }
                 TermsEnum termsEnum = null;
                 try {
                     termsEnum = terms.iterator();
@@ -105,7 +101,6 @@ public class PaperAbsIndexHandler {
                 while ((ref = termsEnum.next()) != null) {
                     termText = ref.utf8ToString();
 
-
                     // here, since termsEnum is obtained from a single
                     // document, docFreq will be 1.
                     int docFreq = termsEnum.docFreq();
@@ -113,8 +108,8 @@ public class PaperAbsIndexHandler {
                     // here, since termsEnum is obtained from a single
                     // document, totalTermFreq() returns tf value.
                     int totalFreq = (int) termsEnum.totalTermFreq();
-//          System.out.println(
-//              String.format("%s, %d, %d", termText, docFreq, totalFreq));
+                    // System.out.println(
+                    // String.format("%s, %d, %d", termText, docFreq, totalFreq));
                     tfMap.put(termText, totalFreq);
                 }
             }
@@ -162,8 +157,8 @@ public class PaperAbsIndexHandler {
     }
 
     /**
-     * Gets a map of term-df pairs for each term from
-     * the filed {@link #ABSTRACT}. df refers to document_frequency.
+     * Gets a map of term-df pairs for each term from the filed {@link #ABSTRACT}.
+     * df refers to document_frequency.
      *
      * @return
      */
@@ -183,10 +178,9 @@ public class PaperAbsIndexHandler {
         return dfMap;
     }
 
-
     /**
-     * Gets a map of term-cf pairs for each term from
-     * the filed {@link #ABSTRACT}. cf refers to collection_frequency.
+     * Gets a map of term-cf pairs for each term from the filed {@link #ABSTRACT}.
+     * cf refers to collection_frequency.
      *
      * @return
      */
@@ -239,10 +233,8 @@ public class PaperAbsIndexHandler {
         // this is the directory we used for indexing
         // in PaperAbsIndexWriter.java
         String indexPath = "20_newsgro_AbsIndex_exam/alt.atheism";
-        PaperAbsIndexHandler indexHandler =
-                new PaperAbsIndexHandler(indexPath);
-        Map<Integer, String> idTitleMap =
-                indexHandler.getIDToTitleMap();
+        PaperAbsIndexHandler indexHandler = new PaperAbsIndexHandler(indexPath);
+        Map<Integer, String> idTitleMap = indexHandler.getIDToTitleMap();
         for (Integer id : idTitleMap.keySet()) {
             String title = idTitleMap.get(id);
             System.out.println(id + " : " + title);
@@ -266,18 +258,16 @@ public class PaperAbsIndexHandler {
             int cf = cfMap.get(term);
             System.out.println(String.format("%s : %d", term, cf));
         }
-    
-    /* Let's sort the terms in dictionary by their df / cf
-     * in decreasing order.
-     * 
-     * */
-        List<KeyValueObj<Integer, String>> sortlist =
-                CollectionsUtil.sort(dfMap, CMPUtil.INT_DESC);
+
+        /*
+         * Let's sort the terms in dictionary by their df / cf in decreasing order.
+         * 
+         */
+        List<KeyValueObj<Integer, String>> sortlist = CollectionsUtil.sort(dfMap, CMPUtil.INT_DESC);
         try {
             PrintWriter out = new PrintWriter("TermDFMap.txt");
             for (int i = 0; i < sortlist.size(); i++) {
-                KeyValueObj<Integer, String> kvo =
-                        sortlist.get(i);
+                KeyValueObj<Integer, String> kvo = sortlist.get(i);
                 int df = kvo.getKey();
                 String term = kvo.getValue();
                 out.print(term);
@@ -293,13 +283,11 @@ public class PaperAbsIndexHandler {
             System.exit(-1);
         }
 
-        sortlist =
-                CollectionsUtil.sort(cfMap, CMPUtil.INT_DESC);
+        sortlist = CollectionsUtil.sort(cfMap, CMPUtil.INT_DESC);
         try {
             PrintWriter out = new PrintWriter("TermCFMap.txt");
             for (int i = 0; i < sortlist.size(); i++) {
-                KeyValueObj<Integer, String> kvo =
-                        sortlist.get(i);
+                KeyValueObj<Integer, String> kvo = sortlist.get(i);
                 int cf = kvo.getKey();
                 String term = kvo.getValue();
                 out.print(term);
@@ -314,16 +302,16 @@ public class PaperAbsIndexHandler {
             e.printStackTrace();
             System.exit(-1);
         }
-    
-    /* Sometimes, we would like to output a .csv file that
-     * contain both df/cf information. By doing this, we can
-     * manually examine the terms of high frequency.
-     * */
+
+        /*
+         * Sometimes, we would like to output a .csv file that contain both df/cf
+         * information. By doing this, we can manually examine the terms of high
+         * frequency.
+         */
         try {
             PrintWriter out = new PrintWriter("TermFreqMap.csv");
             for (int i = 0; i < sortlist.size(); i++) {
-                KeyValueObj<Integer, String> kvo =
-                        sortlist.get(i);
+                KeyValueObj<Integer, String> kvo = sortlist.get(i);
                 int cf = kvo.getKey();
                 String term = kvo.getValue();
 
@@ -344,12 +332,11 @@ public class PaperAbsIndexHandler {
         }
 
         /**
-         * Of course, we can load these term-frequency map from
-         * a file. The file should contain each pair in one row, and
-         * the term and int value are separated by ','.
+         * Of course, we can load these term-frequency map from a file. The file should
+         * contain each pair in one row, and the term and int value are separated by
+         * ','.
          */
-        dfMap = IOUtil.readStringToIntegerMap(
-                "TermDFMap.txt", "utf8");
+        dfMap = IOUtil.readStringToIntegerMap("TermDFMap.txt", "utf8");
         for (String term : dfMap.keySet()) {
             int df = dfMap.get(term);
             System.out.println(String.format("%s : %d", term, df));

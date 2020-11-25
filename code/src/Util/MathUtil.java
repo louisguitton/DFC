@@ -7,7 +7,6 @@ import java.util.Map;
  */
 public class MathUtil {
 
-
     public static void main(String[] args) {
 
     }
@@ -15,9 +14,9 @@ public class MathUtil {
     public static int sample(double[] raw) {
 
         for (int i = 1; i < raw.length; i++) {
-        	//System.out.println("raw["+i+"]: "+raw[i]);
+            // System.out.println("raw["+i+"]: "+raw[i]);
             raw[i] += raw[i] + raw[i - 1];
-            
+
         }
         if (raw[raw.length - 1] == 0)
             return 0;
@@ -26,17 +25,17 @@ public class MathUtil {
         for (re = 0; re < raw.length; re++)
             if (p < raw[re])
                 break;
-        if (re > raw.length - 1){
-        	System.out.println("re: "+re);
-        	for(int i=0;i<raw.length;i++){
-        		System.out.println("raw["+i+"]: "+raw[i]);
-        	}
-        	System.out.println("raw.length: "+raw.length);
-        	System.out.println("raw[re]: "+raw[re]);
-        	System.out.println("p: "+p);
-        	return -2;
+        if (re > raw.length - 1) {
+            System.out.println("re: " + re);
+            for (int i = 0; i < raw.length; i++) {
+                System.out.println("raw[" + i + "]: " + raw[i]);
+            }
+            System.out.println("raw.length: " + raw.length);
+            System.out.println("raw[re]: " + raw[re]);
+            System.out.println("p: " + p);
+            return -2;
         }
-            
+
         return re;
     }
 
@@ -66,22 +65,21 @@ public class MathUtil {
 
     public static double[] proportion_neg(double[] raw) {
         double max = raw[0];
-        double propor[]=new double[raw.length];
+        double propor[] = new double[raw.length];
         for (double d : raw)
             if (d > max)
                 max = d;
         double total = 0;
         for (int i = 0; i < raw.length; i++) {
-            propor[i] =Math.exp(raw[i]- max);
+            propor[i] = Math.exp(raw[i] - max);
             total += propor[i];
         }
 
-        for(int i=0;i<propor.length;i++){
-            propor[i]/=total;
+        for (int i = 0; i < propor.length; i++) {
+            propor[i] /= total;
         }
         return propor;
     }
-
 
     public static double cosSim(double[] a, double[] b) {
         double re = 0;

@@ -15,16 +15,15 @@ public class Dictionary {
     private static HashMap<String, Integer> cate2id;
     private static int index = 0;
     private static int cateIndex = 0;
-    
-    public static void clear(){
-    	word2id.clear();
-    	id2word.clear();
-    	id2cate.clear();
-    	cate2id.clear();
-    	index=0;
-    	cateIndex=0;
-    }
 
+    public static void clear() {
+        word2id.clear();
+        id2word.clear();
+        id2cate.clear();
+        cate2id.clear();
+        index = 0;
+        cateIndex = 0;
+    }
 
     public static int initDic(String dicPath) {
         word2id = new HashMap<>();
@@ -59,27 +58,23 @@ public class Dictionary {
     }
 
     public static int getIndex(String word) {
-         if (word2id.containsKey(word))
+        if (word2id.containsKey(word))
             return word2id.get(word);
         else
             return -1;
     }
 
-   /* public static void output(String path) {
-        try {
-            PrintWriter pw = new PrintWriter(path);
-            word2id.keySet().forEach(pw::println);
-            pw.flush();
-            pw.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
+    /*
+     * public static void output(String path) { try { PrintWriter pw = new
+     * PrintWriter(path); word2id.keySet().forEach(pw::println); pw.flush();
+     * pw.close(); } catch (Exception e) { e.printStackTrace(); } }
+     */
 
     public static int contains(String word) {
         if (word2id.containsKey(word))
             return word2id.get(word);
-        else return -1;
+        else
+            return -1;
     }
 
     public static String containsCate(int index) {

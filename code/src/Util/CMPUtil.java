@@ -10,36 +10,36 @@ import java.util.Comparator;
  *
  */
 public class CMPUtil {
-  
-  private CMPUtil(){ // noninstantiable class
+
+  private CMPUtil() { // noninstantiable class
     throw new AssertionError();
   }
 
-  public static boolean isPos(double value){
+  public static boolean isPos(double value) {
     return Double.compare(0, value) < 0;
   }
 
-  public static boolean isNeg(double value){
+  public static boolean isNeg(double value) {
     return Double.compare(0, value) > 0;
   }
 
-  public static boolean isZero(double value){
+  public static boolean isZero(double value) {
     return Double.compare(value, 0) == 0;
   }
 
   /**
-   * Return 0 if the specified value is numerically equal to 0;
-   * Return -1 if the specified value is numerically less than 0;
-   * Return 1 if the specified value is numerically greater than 0;
+   * Return 0 if the specified value is numerically equal to 0; Return -1 if the
+   * specified value is numerically less than 0; Return 1 if the specified value
+   * is numerically greater than 0;
+   * 
    * @param value
    * @return
    */
-  public static int cmpZero(double value){
+  public static int cmpZero(double value) {
     return Double.compare(value, 0.0);
   }
 
-  public static Comparator<Long> LONG_ASC = 
-      new Comparator<Long>() {
+  public static Comparator<Long> LONG_ASC = new Comparator<Long>() {
 
     @Override
     public int compare(Long l1, Long l2) {
@@ -48,8 +48,7 @@ public class CMPUtil {
     }
   };
 
-  public static Comparator<Long> LONG_DESC = 
-      new Comparator<Long>() {
+  public static Comparator<Long> LONG_DESC = new Comparator<Long>() {
 
     @Override
     public int compare(Long l1, Long l2) {
@@ -58,8 +57,7 @@ public class CMPUtil {
     }
   };
 
-  public static Comparator<Double> DOUBLE_ASC = 
-      new Comparator<Double>() {
+  public static Comparator<Double> DOUBLE_ASC = new Comparator<Double>() {
     @Override
     public int compare(Double d1, Double d2) {
       // TODO Auto-generated
@@ -68,8 +66,7 @@ public class CMPUtil {
     }
   };
 
-  public static Comparator<Double> DOUBLE_DESC = 
-      new Comparator<Double>() {
+  public static Comparator<Double> DOUBLE_DESC = new Comparator<Double>() {
     @Override
     public int compare(Double d1, Double d2) {
       // TODO Auto-generated
@@ -78,8 +75,7 @@ public class CMPUtil {
     }
   };
 
-  public static Comparator<Integer> INT_ASC = 
-      new Comparator<Integer>() {
+  public static Comparator<Integer> INT_ASC = new Comparator<Integer>() {
     @Override
     public int compare(Integer d1, Integer d2) {
       // TODO Auto-generated
@@ -88,8 +84,7 @@ public class CMPUtil {
     }
   };
 
-  public static Comparator<Integer> INT_DESC = 
-      new Comparator<Integer>() {
+  public static Comparator<Integer> INT_DESC = new Comparator<Integer>() {
     @Override
     public int compare(Integer d1, Integer d2) {
       // TODO Auto-generated

@@ -35,16 +35,16 @@ public class LoadDocs implements Decorator {
 	}
 
 	/*
-	 * ÅÐ¶ÏÎÄµµµÄÏà¹ØÐÔ£¬³õÊ¼»¯Ã¿ÆªÓÐ¹ØÎÄµµ param (ÎÄµµÄÚÈÝ£¬ÎÄµµ¶ÔÏó)
+	 * ï¿½Ð¶ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ã¿Æªï¿½Ð¹ï¿½ï¿½Äµï¿½ param (ï¿½Äµï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½)
 	 */
 	private void initContForFilter(String cont, SDocument sDoc) {
 		String[] ves = cont.split(" ");
 
-		// µ±Ç°ÎÄµµ°üº¬µÄinteresting categoryµÄseed word¸öÊý f(d,c),ÓÃÓÚ¼ÆËã¦Çd
+		// ï¿½ï¿½Ç°ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½interesting categoryï¿½ï¿½seed wordï¿½ï¿½ï¿½ï¿½ f(d,c),ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½ï¿½d
 		double[] re = new double[model.iCateNum];
 		// int count=0;
 		for (String s : ves) {
-			// Ö»Òª°üÀ¨Ò»¸öÀà±ðµÄseed word¾Í°Ñ¸ÃÎÄµµ³õÊ¼»¯ÎªÓÐ¹ØÎÄµµ
+			// Ö»Òªï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½seed wordï¿½Í°Ñ¸ï¿½ï¿½Äµï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Îªï¿½Ð¹ï¿½ï¿½Äµï¿½
 			for (int cate = 0; cate < model.iCateNum; cate++)
 				if (model.seedSet[cate].contains(s)) {
 					sDoc.y = 1;
@@ -56,20 +56,19 @@ public class LoadDocs implements Decorator {
 			 * if(count>4) sDoc.y=1;
 			 */
 		}
-		// ¼ÆËã¸ÃÆªÎÄµµµÄ¦Çd(c)£¬c¡Êinteresting category
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Æªï¿½Äµï¿½ï¿½Ä¦ï¿½d(c)ï¿½ï¿½cï¿½ï¿½interesting category
 		initEta(re, sDoc.index);
 
-		// Î±Ïà¹ØÎÄµµ
+		// Î±ï¿½ï¿½ï¿½ï¿½Äµï¿½
 		if (sDoc.y == 1) {
 			int cate = 0;
 			// double maxEta = model.eta[sDoc.index][0];
-			// ¸ù¾Ý¦Ç½øÐÐÀà±ðµÄ²ÉÑù
+			// ï¿½ï¿½ï¿½Ý¦Ç½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
 			// cate = MathUtil.sample_neg(model.eta[sDoc.index]);
 			cate = MathUtil.sample(model.eta[sDoc.index]);
-			// µÃµ½µ±Ç°ÎÄµµµÄ³õÊ¼»¯Àà±ð£¬È¡¦Ç×î´óÖµ
+			// ï¿½Ãµï¿½ï¿½ï¿½Ç°ï¿½Äµï¿½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 			/*
-			 * for(int i=1;i<model.iCateNum;i++){
-			 * if(model.eta[sDoc.index][i]>maxEta){
+			 * for(int i=1;i<model.iCateNum;i++){ if(model.eta[sDoc.index][i]>maxEta){
 			 * maxEta=model.eta[sDoc.index][i]; cate=i; } }
 			 */
 			sDoc.prediction = cate;
@@ -78,48 +77,46 @@ public class LoadDocs implements Decorator {
 				word = Dictionary.contains(s);
 				if (word == -1)
 					continue;
-				if (model.seedSet[sDoc.prediction].contains(Dictionary
-						.getWord(word))
-						&& Math.random() < 0.5
+				if (model.seedSet[sDoc.prediction].contains(Dictionary.getWord(word)) && Math.random() < 0.5
 						|| Math.random() < (model.rho)) {
 					// if
 					// (model.seedSet[sDoc.prediction].contains(Dictionary.getWord(word))&&
 					// Math.random() < 0.5|| Math.random() < 0.5) {
 					// if(Math.random()<model.tao[word][sDoc.prediction]){
 					sDoc.xvec.add(0);
-					// docX[0]Í³¼ÆµÄÊÇµ±Ç°ÎÄµµµÄcategory word¸öÊý docX[1]Í³¼Æ·Çcategory wordÊý
+					// docX[0]Í³ï¿½Æµï¿½ï¿½Çµï¿½Ç°ï¿½Äµï¿½ï¿½ï¿½category wordï¿½ï¿½ï¿½ï¿½ docX[1]Í³ï¿½Æ·ï¿½category wordï¿½ï¿½
 					model.docX[sDoc.index][0]++;
-					// x=0µÄÇé¿öÏÂ£¬Ã¿¸ö´ÊµÄtopic¶¼³õÊ¼»¯Îª-1
+					// x=0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½Ã¿ï¿½ï¿½ï¿½Êµï¿½topicï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Îª-1
 					sDoc.contents.add(new Pair(word, -1));
-					// Ncw++,Ncw word±»·Öµ½category cµÄ´ÎÊý
+					// Ncw++,Ncw wordï¿½ï¿½ï¿½Öµï¿½category cï¿½Ä´ï¿½ï¿½ï¿½
 					model.categoryWord[sDoc.prediction][word]++;
-					// µ±Ç°ÎÄµµµÄcategory CdÏÂµÄcategory wordÊý ¡ÆNcw
+					// ï¿½ï¿½Ç°ï¿½Äµï¿½ï¿½ï¿½category Cdï¿½Âµï¿½category wordï¿½ï¿½ ï¿½ï¿½Ncw
 					model.numCWords4Cate[sDoc.prediction]++;
 				}
-				// ²»ÊÇcategory word
+				// ï¿½ï¿½ï¿½ï¿½category word
 				else {
 					model.docX[sDoc.index][1]++;
 					sDoc.xvec.add(1);
-					// Ëæ»úÎªx=1µÄword ·ÖÅäÒ»¸ögeneral-topic
+					// ï¿½ï¿½ï¿½Îªx=1ï¿½ï¿½word ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½general-topic
 					topic = (int) (Math.random() * model.topicNum);
 					sDoc.contents.add(new Pair(word, topic));
-					// Nct++£¬Nct£º wordÔÚcate cÏÂµÄÎÄµµÄÚÇÒ±»·Öµ½topic tÏÂ
+					// Nct++ï¿½ï¿½Nctï¿½ï¿½ wordï¿½ï¿½cate cï¿½Âµï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½Ò±ï¿½ï¿½Öµï¿½topic tï¿½ï¿½
 					model.categoryTopic[sDoc.prediction][topic]++;
-					// Ndt++,Ndt: ÎÄµµdÖÐµÄ´Ê±»·Öµ½topic tÏÂµÄ´ÎÊý
+					// Ndt++,Ndt: ï¿½Äµï¿½dï¿½ÐµÄ´Ê±ï¿½ï¿½Öµï¿½topic tï¿½ÂµÄ´ï¿½ï¿½ï¿½
 					model.docTopic[sDoc.index][topic]++;
-					// Ntw++,Ntw: word w±»·Öµ½general-topic tÏÂ
+					// Ntw++,Ntw: word wï¿½ï¿½ï¿½Öµï¿½general-topic tï¿½ï¿½
 					model.wordTopic[word][topic]++;
-					// ¡ÆNct,ÊôÓÚÎÄµµÀà±ðÊÇcµÄÎÄµµµÄËùÓÐ´Ê ÇÒ x=1£¬²»ÊÇcategory word (the total
+					// ï¿½ï¿½Nct,ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ ï¿½ï¿½ x=1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½category word (the total
 					// number of words within the doc of category c and the
 					// words are not category words)
 					model.numRWords4Cate[sDoc.prediction]++;
-					// ¡ÆNtw,·Öµ½topic tÏÂµÄ×Ü´ÊÊý
+					// ï¿½ï¿½Ntw,ï¿½Öµï¿½topic tï¿½Âµï¿½ï¿½Ü´ï¿½ï¿½ï¿½
 					model.numRWords4Topic[topic]++;
 				}
 
 			}
 			sDoc.doclength = sDoc.contents.size();
-		}// end sDoc.y==1
+		} // end sDoc.y==1
 
 	}
 
@@ -146,10 +143,8 @@ public class LoadDocs implements Decorator {
 			sDoc.y = 1;
 			sDoc.scores = new double[model.cateNum];
 			sDoc.title = luceneDoc.get(LuceneHandler.TITLE);
-			sDoc.groundTruth = Integer.parseInt(luceneDoc
-					.get(LuceneHandler.CATE));
-			sDoc.check = Integer.parseInt(luceneDoc.get(LuceneHandler.CHECK)) == 1 ? true
-					: false;
+			sDoc.groundTruth = Integer.parseInt(luceneDoc.get(LuceneHandler.CATE));
+			sDoc.check = Integer.parseInt(luceneDoc.get(LuceneHandler.CHECK)) == 1 ? true : false;
 
 			sDoc.xvec = new ArrayList<>();
 			if (sDoc.check)
@@ -177,9 +172,7 @@ public class LoadDocs implements Decorator {
 			if (word == -1)
 				continue;
 			// category word
-			if (model.seedSet[sDoc.prediction].contains(Dictionary
-					.getWord(word))
-					&& Math.random() < 0.5
+			if (model.seedSet[sDoc.prediction].contains(Dictionary.getWord(word)) && Math.random() < 0.5
 					|| Math.random() < (model.rho)) {
 				sDoc.xvec.add(0);
 				model.docX[sDoc.index][0]++;
@@ -225,10 +218,8 @@ public class LoadDocs implements Decorator {
 			sDoc.y = 1;
 			sDoc.scores = new double[model.cateNum];
 			sDoc.title = luceneDoc.get(LuceneHandler.TITLE);
-			sDoc.groundTruth = Integer.parseInt(luceneDoc
-					.get(LuceneHandler.CATE));
-			sDoc.check = Integer.parseInt(luceneDoc.get(LuceneHandler.CHECK)) == 1 ? true
-					: false;
+			sDoc.groundTruth = Integer.parseInt(luceneDoc.get(LuceneHandler.CATE));
+			sDoc.check = Integer.parseInt(luceneDoc.get(LuceneHandler.CHECK)) == 1 ? true : false;
 
 			sDoc.xvec = new ArrayList<>();
 			if (sDoc.check)
@@ -266,9 +257,7 @@ public class LoadDocs implements Decorator {
 				continue;
 			if (sDoc.prediction < model.iCateNum) {
 				// category word
-				if (model.seedSet[sDoc.prediction].contains(Dictionary
-						.getWord(word))
-						&& Math.random() < 0.5
+				if (model.seedSet[sDoc.prediction].contains(Dictionary.getWord(word)) && Math.random() < 0.5
 						|| Math.random() < (model.rho)) {
 					sDoc.xvec.add(0);
 					model.docX[sDoc.index][0]++;
@@ -291,9 +280,7 @@ public class LoadDocs implements Decorator {
 
 			} else {
 				// category word
-				if (model.fakeSeedSet[sDoc.prediction].contains(Dictionary
-						.getWord(word))
-						&& Math.random() < 0.5
+				if (model.fakeSeedSet[sDoc.prediction].contains(Dictionary.getWord(word)) && Math.random() < 0.5
 						|| Math.random() < (model.rho)) {
 					sDoc.xvec.add(0);
 					model.docX[sDoc.index][0]++;
@@ -341,8 +328,7 @@ public class LoadDocs implements Decorator {
 		for (int c = 0; c < model.cateNum; c++)
 			for (int k = 0; k < model.topicNum; k++) {
 				model.phi[c][k] = (model.categoryTopic[c][k] + model.alpha0)
-						/ (model.numRWords4Cate[c] + model.topicNum
-								* model.alpha0);
+						/ (model.numRWords4Cate[c] + model.topicNum * model.alpha0);
 				model.phi[c][k] *= model.alpha2;
 				model.phiSum[c] += model.phi[c][k];
 			}

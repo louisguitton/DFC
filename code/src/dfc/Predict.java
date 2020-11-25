@@ -57,8 +57,7 @@ public class Predict implements Decorator {
 				model.phiSum[doc.prediction] = 0;
 				for (int k = 0; k < model.topicNum; k++) {
 					model.phi[doc.prediction][k] = (model.categoryTopic[doc.prediction][k] + model.alpha0)
-							/ (model.numRWords4Cate[doc.prediction] + model.topicNum
-									* model.alpha0);
+							/ (model.numRWords4Cate[doc.prediction] + model.topicNum * model.alpha0);
 					model.phi[doc.prediction][k] *= model.alpha2;
 					model.phiSum[doc.prediction] += model.phi[doc.prediction][k];
 				}
@@ -73,8 +72,7 @@ public class Predict implements Decorator {
 					Sampling.sampleXZ(i, model, c, xmirror, zmirror);
 
 					// compute the probability of document
-					doc.scores[c] = Sampling.sampleC(i, model, c, xmirror[c],
-							zmirror[c], wmirror[c]);
+					doc.scores[c] = Sampling.sampleC(i, model, c, xmirror[c], zmirror[c], wmirror[c]);
 
 					// rollback
 					Sampling.rollBackForC(i, model, c, xmirror[c], zmirror[c]);
@@ -89,8 +87,7 @@ public class Predict implements Decorator {
 					Sampling.sampleXZ(i, model, c, xmirror, zmirror);
 
 					// compute the probability of document
-					doc.scores[c] = Sampling.sampleB(i, model, c, xmirror[c],
-							zmirror[c], wmirror[c]);
+					doc.scores[c] = Sampling.sampleB(i, model, c, xmirror[c], zmirror[c], wmirror[c]);
 
 					// roll back
 					Sampling.rollBackForB(i, model, c, xmirror[c], zmirror[c]);
@@ -110,8 +107,7 @@ public class Predict implements Decorator {
 				model.phiSum[doc.prediction] = 0;
 				for (int k = 0; k < model.topicNum; k++) {
 					model.phi[doc.prediction][k] = (model.categoryTopic[doc.prediction][k] + model.alpha0)
-							/ (model.numRWords4Cate[doc.prediction] + model.topicNum
-									* model.alpha0);
+							/ (model.numRWords4Cate[doc.prediction] + model.topicNum * model.alpha0);
 					model.phi[doc.prediction][k] *= model.alpha2;
 					model.phiSum[doc.prediction] += model.phi[doc.prediction][k];
 				}
@@ -122,12 +118,10 @@ public class Predict implements Decorator {
 
 		}
 		model.resultWriter.close();
-		System.out
-				.println("--------------------End output the result--------------------");
+		System.out.println("--------------------End output the result--------------------");
 	}
 
-	protected static void copy(int[] xmirror, int[] zmirror, int[] wmirror,
-			SDocument doc) {
+	protected static void copy(int[] xmirror, int[] zmirror, int[] wmirror, SDocument doc) {
 		for (int w = 0; w < doc.contents.size(); w++) {
 			xmirror[w] = doc.xvec.get(w);
 			zmirror[w] = doc.contents.get(w).topic;

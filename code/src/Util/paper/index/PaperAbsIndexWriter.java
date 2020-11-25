@@ -29,16 +29,14 @@ public class PaperAbsIndexWriter {
     public static final String ABSTRACT = "abs";
     public static final String ID = "id";
     public static final String CATEGORY = "category";
-    public static final String CHECK = "check";//check=true时表示测试集，参加最后的acc计算
-
+    public static final String CHECK = "check";// check=true时表示测试集，参加最后的acc计算
 
     private static final String SUFFIX = ".txt";
 
-
     /**
-     * Create a new index under the specified indexPath for
-     * the abstracts from the specified directory absPath.
-     * Note: the old index files with the same name will be removed.
+     * Create a new index under the specified indexPath for the abstracts from the
+     * specified directory absPath. Note: the old index files with the same name
+     * will be removed.
      *
      * @param absPath
      * @param indexPath
@@ -46,7 +44,6 @@ public class PaperAbsIndexWriter {
     public static int startIndex(String absPath, String indexPath) {
         return startIndex(absPath, indexPath, 0, true);
     }
-
 
     public static int startIndex(String absPath, String indexPath, int cate, boolean createNew) {
         return startIndex(absPath, indexPath, cate, createNew, false);
@@ -57,11 +54,12 @@ public class PaperAbsIndexWriter {
         try {
             List<String[]> paperList = loadAbs(absPath, cate);
             Directory dir = FSDirectory.open(Paths.get(indexPath));
-            // BufferedReader stopwordsReader = new BufferedReader(new FileReader("D:\\dataSet\\stopwords-1.txt"));
+            // BufferedReader stopwordsReader = new BufferedReader(new
+            // FileReader("D:\\dataSet\\stopwords-1.txt"));
             Analyzer analyzer =
                     // new StandardAnalyzer(stopwordsReader);
                     new StandardAnalyzer();
-//          new PorterStemAnalyzer();
+            // new PorterStemAnalyzer();
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             if (createNew) {
@@ -72,8 +70,7 @@ public class PaperAbsIndexWriter {
             } else {
                 // Add new documents to an existing index:
                 try {
-                    IndexReader indexReader =
-                            DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
+                    IndexReader indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
                     iwc.setOpenMode(OpenMode.APPEND);
                     beginId = indexReader.numDocs();
                     // iwc.setOpenMode(OpenMode.APPEND);
@@ -84,7 +81,7 @@ public class PaperAbsIndexWriter {
 
             // Optional: for better indexing performance, if you
             // are indexing many documents, increase the RAM
-            // buffer.  But if you do this, increase the max heap
+            // buffer. But if you do this, increase the max heap
             // size to the JVM (eg add -Xmx512m or -Xmx1g):
             //
             // iwc.setRAMBufferSizeMB(256.0);
@@ -122,10 +119,8 @@ public class PaperAbsIndexWriter {
             int id = beginId;
             for (String[] record : paperList) {
                 idField.setStringValue(String.valueOf(id));
-                titleField.setStringValue(
-                        record[0] == null ? "null" : record[0]);
-                absField.setStringValue(
-                        record[1] == null ? "null" : record[1]);
+                titleField.setStringValue(record[0] == null ? "null" : record[0]);
+                absField.setStringValue(record[1] == null ? "null" : record[1]);
                 checkField.setIntValue(check == true ? 1 : 0);
                 // cateField.setStringValue(record[2]==null?"null":record[2]);
 
@@ -137,8 +132,8 @@ public class PaperAbsIndexWriter {
                     // we use updateDocument instead to replace the old one matching the exact
                     // path, if present:
                     // System.out.println("updating " + record[0]);
-                    //   writer.updateDocument(
-                    //         new Term(ID, String.valueOf(id)), doc);
+                    // writer.updateDocument(
+                    // new Term(ID, String.valueOf(id)), doc);
                     writer.addDocument(doc);
 
                 }
@@ -152,14 +147,14 @@ public class PaperAbsIndexWriter {
             }
 
             // NOTE: if you want to maximize search performance,
-            // you can optionally call forceMerge here.  This can be
+            // you can optionally call forceMerge here. This can be
             // a terribly costly operation, so generally it's only
             // worth it when your index is relatively static (ie
             // you're done adding documents to it):
             //
-            // ****** In our research work, the dataset is almost  *****
-            //******* static, and we often index them only once. *****
-            //******* So, we need turn this call on. ******
+            // ****** In our research work, the dataset is almost *****
+            // ******* static, and we often index them only once. *****
+            // ******* So, we need turn this call on. ******
             writer.forceMerge(1);
             writer.close();
             return id;
@@ -170,16 +165,18 @@ public class PaperAbsIndexWriter {
 
     }
 
-    public static int startIndex_random(String absPath, String indexPath, int cate, boolean createNew, boolean check, int num) {
+    public static int startIndex_random(String absPath, String indexPath, int cate, boolean createNew, boolean check,
+            int num) {
         int beginId = 0;
         try {
             List<String[]> paperList = loadAbs_randomSelect(absPath, cate, num);
             Directory dir = FSDirectory.open(Paths.get(indexPath));
-            // BufferedReader stopwordsReader = new BufferedReader(new FileReader("D:\\dataSet\\stopwords-1.txt"));
+            // BufferedReader stopwordsReader = new BufferedReader(new
+            // FileReader("D:\\dataSet\\stopwords-1.txt"));
             Analyzer analyzer =
                     // new StandardAnalyzer(stopwordsReader);
                     new StandardAnalyzer();
-//          new PorterStemAnalyzer();
+            // new PorterStemAnalyzer();
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             if (createNew) {
@@ -190,8 +187,7 @@ public class PaperAbsIndexWriter {
             } else {
                 // Add new documents to an existing index:
                 try {
-                    IndexReader indexReader =
-                            DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
+                    IndexReader indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
                     iwc.setOpenMode(OpenMode.APPEND);
                     beginId = indexReader.numDocs();
                     // iwc.setOpenMode(OpenMode.APPEND);
@@ -231,10 +227,8 @@ public class PaperAbsIndexWriter {
             int id = beginId;
             for (String[] record : paperList) {
                 idField.setStringValue(String.valueOf(id));
-                titleField.setStringValue(
-                        record[0] == null ? "null" : record[0]);
-                absField.setStringValue(
-                        record[1] == null ? "null" : record[1]);
+                titleField.setStringValue(record[0] == null ? "null" : record[0]);
+                absField.setStringValue(record[1] == null ? "null" : record[1]);
                 checkField.setIntValue(check == true ? 1 : 0);
 
                 if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
@@ -243,9 +237,9 @@ public class PaperAbsIndexWriter {
                     writer.addDocument(doc);
                 }
                 ++id;
-//                if (++id % 2 == 0) {
-//                    System.out.println(id + " have been indexed...");
-//                }
+                // if (++id % 2 == 0) {
+                // System.out.println(id + " have been indexed...");
+                // }
             }
             System.out.println(id + " have been indexed...");
             writer.forceMerge(1);
@@ -259,14 +253,12 @@ public class PaperAbsIndexWriter {
     }
 
     /**
-     * P
-     * Load all title-abstract pairs from .txt files under the
-     * specified directory absPath. The title is the file name,
-     * the abstract is the contents of the file.
+     * P Load all title-abstract pairs from .txt files under the specified directory
+     * absPath. The title is the file name, the abstract is the contents of the
+     * file.
      *
      * @param absPath
-     * @return A list of two-elements String[]:
-     * [0]=title; [1]=abstract.
+     * @return A list of two-elements String[]: [0]=title; [1]=abstract.
      * @throws IOException
      */
     public static List<String[]> loadAbs(String absPath, int cate) throws IOException {
@@ -274,36 +266,33 @@ public class PaperAbsIndexWriter {
         File file = new File(absPath);
 
         if (!file.exists() || !file.isDirectory()) {
-               throw new IllegalArgumentException(
-               "absPath must be a folder path");
+            throw new IllegalArgumentException("absPath must be a folder path");
         }
         File[] txtFiles = file.listFiles();
 
-            for (File txtFile : txtFiles) {
-                String title = txtFile.getName();
-                // title = title.substring(0,
-                //    title.length()-SUFFIX.length());
-                String abs = IOUtil.getFileText(txtFile);
-                String[] pair = new String[3];
-                pair[0] = title;
-                pair[1] = abs;
-                pair[2] = String.valueOf(cate);
-                list.add(pair);
-            }
+        for (File txtFile : txtFiles) {
+            String title = txtFile.getName();
+            // title = title.substring(0,
+            // title.length()-SUFFIX.length());
+            String abs = IOUtil.getFileText(txtFile);
+            String[] pair = new String[3];
+            pair[0] = title;
+            pair[1] = abs;
+            pair[2] = String.valueOf(cate);
+            list.add(pair);
+        }
 
         return list;
     }
 
-    //random select document form corpus
+    // random select document form corpus
     public static List<String[]> loadAbs_randomSelect(String absPath, int cate, int num) throws IOException {
         ArrayList<String[]> list = new ArrayList<String[]>();
         File file = new File(absPath);
         int len;
 
-
         if (!file.exists() || !file.isDirectory()) {
-            throw new IllegalArgumentException(
-                    "absPath must be a folder path");
+            throw new IllegalArgumentException("absPath must be a folder path");
         }
         File[] txtFiles = file.listFiles();
         len = txtFiles.length;
@@ -333,7 +322,7 @@ public class PaperAbsIndexWriter {
      */
     public static void main(String[] args) throws Exception {
         // TODO Auto-generated macroF1 stub
-        //loadAbs("abstracts");
+        // loadAbs("abstracts");
         startIndex("20_newsgroup/alt.atheism", "20_newsgro_AbsIndex/alt.atheism");
     }
 

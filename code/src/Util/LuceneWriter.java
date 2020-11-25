@@ -15,8 +15,8 @@ public class LuceneWriter {
         ArrayList<String>[] groupInfo = new ArrayList[cataSize];
         for (int i = 0; i < cataSize; i++)
             groupInfo[i] = new ArrayList<>();
-        
-        //读取category存在groupinfo里，groupinfo[i]存相同的大类，每一项是一个subcategory
+
+        // 锟斤拷取category锟斤拷锟斤拷groupinfo锟斤，groupinfo[i]锟斤拷锟斤拷同锟侥达拷锟洁，每一锟斤拷锟斤拷一锟斤拷subcategory
         BufferedReader br;
         String line;
         String[] vecs;
@@ -38,8 +38,7 @@ public class LuceneWriter {
             System.exit(-1);
         }
 
-
-        //write groupIndex of test set
+        // write groupIndex of test set
         if (groupInfo.length == 0)
             return -1;
 
@@ -47,7 +46,8 @@ public class LuceneWriter {
 
         numDoc += PaperAbsIndexWriter.startIndex(corpusPath + "\\" + groupInfo[0].get(0), indexPath, 0, true, check);
         for (int i = 1; i < groupInfo[0].size(); i++)
-            numDoc += PaperAbsIndexWriter.startIndex(corpusPath + "\\" + groupInfo[0].get(i), indexPath, 0, false, check);
+            numDoc += PaperAbsIndexWriter.startIndex(corpusPath + "\\" + groupInfo[0].get(i), indexPath, 0, false,
+                    check);
 
         for (int c = 1; c < groupInfo.length; c++) {
             for (String s : groupInfo[c])
@@ -56,7 +56,8 @@ public class LuceneWriter {
         return numDoc;
     }
 
-    public static int writeIndex_append(String indexPath, String corpusPath, int cataSize, String catalogPath, boolean check) {
+    public static int writeIndex_append(String indexPath, String corpusPath, int cataSize, String catalogPath,
+            boolean check) {
         ArrayList<String>[] groupInfo = new ArrayList[cataSize];
         for (int i = 0; i < cataSize; i++)
             groupInfo[i] = new ArrayList<>();
@@ -82,15 +83,15 @@ public class LuceneWriter {
             System.exit(-1);
         }
 
-
-        //write groupIndex of train set
+        // write groupIndex of train set
         if (groupInfo.length == 0)
             return -1;
 
         int numDoc = 0;
 
         for (int i = 0; i < groupInfo[0].size(); i++)
-            numDoc += PaperAbsIndexWriter.startIndex(corpusPath + "\\" + groupInfo[0].get(i), indexPath, 0, false, check);
+            numDoc += PaperAbsIndexWriter.startIndex(corpusPath + "\\" + groupInfo[0].get(i), indexPath, 0, false,
+                    check);
 
         for (int c = 1; c < groupInfo.length; c++) {
             for (String s : groupInfo[c])
